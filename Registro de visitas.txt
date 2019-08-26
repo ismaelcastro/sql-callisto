@@ -1,0 +1,18 @@
+select cd, cdFilial, cdRepres, cdTerritorio, cdTpAtendCom, obs, dtSaida, dtChegada, TotalLitros,
+dsTerritorio =(select dsTerritorio from Territorio where Territorio.cdterritorio = VisitaCom.cdTerritorio),
+nomeRepre = (select Repres.nmRepres from Repres where Repres.cdRepres = VisitaCom.cdRepres),
+cidades = dbo.fcTerritorio_nCidades_Get(cdTerritorio),
+cidadesVisitadas = (select count(distinct CidadeVisitaCom.cdCidadeDestino)-1 from CidadeVisitaCom 
+with(nolock) where CidadeVisitaCom.cdVisitaCom = VisitaCom.cd),
+medicos = case when VisitaCom.cdTerritorio IS NULL THEN 0 ELSE (select count(*) from EntCli with(nolock), 
+TerritorioCidade with(nolock) where EntCli.tpEntCli in ('A', 'C') and 
+EntCli.cdCidade=TerritorioCidade.cdCidade and TerritorioCidade.cdTerritorio=VisitaCom.cdTerritorio) end,
+medicosVisitados = (SELECT count(*) from VisitaMedico with(nolock) where VisitaMedico.cd = VisitaCom.cd),
+kmInicial = (SELECT MIN(kmOrigem) from CidadeVisitaCom with(nolock) where CidadeVisitaCom.cdVisitaCom = VisitaCom.cd),
+kmFinal = (SELECT MAX(kmUrbano) from CidadeVisitaCom with(nolock) where CidadeVisitaCom.cdVisitaCom = VisitaCom.cd),
+motvisita
+from VisitaCom with(nolock);
+
+select * from Repres where cdRepres = 5;
+
+select * from Territorio;
