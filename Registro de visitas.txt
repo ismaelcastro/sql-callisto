@@ -1,6 +1,7 @@
 select cd, cdFilial, cdRepres, cdTerritorio, cdTpAtendCom, obs, dtSaida, dtChegada, TotalLitros,
-dsTerritorio =(select dsTerritorio from Territorio where Territorio.cdterritorio = VisitaCom.cdTerritorio),
-nomeRepre = (select Repres.nmRepres from Repres where Repres.cdRepres = VisitaCom.cdRepres),
+NmFilial = (select NmFilial from Filial with(nolock) where Filial.cdFilial = VisitaCom.cdFilial),
+dsTerritorio =(select dsTerritorio from Territorio with(nolock) where Territorio.cdterritorio = VisitaCom.cdTerritorio),
+nomeRepre = (select Repres.nmRepres from Repres with(nolock) where Repres.cdRepres = VisitaCom.cdRepres),
 cidades = dbo.fcTerritorio_nCidades_Get(cdTerritorio),
 cidadesVisitadas = (select count(distinct CidadeVisitaCom.cdCidadeDestino)-1 from CidadeVisitaCom 
 with(nolock) where CidadeVisitaCom.cdVisitaCom = VisitaCom.cd),
@@ -16,3 +17,4 @@ from VisitaCom with(nolock);
 select * from Repres where cdRepres = 5;
 
 select * from Territorio;
+select * from Filial;
